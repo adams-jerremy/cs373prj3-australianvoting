@@ -82,40 +82,46 @@ def my_eval():
                 maxIndex = c
             if temp<min:
                 min = temp
-                minIndex = c
-        if minIndex == -1 and maxIndex == -1:
+        if maxIndex == -1:
             return
-        print candidates[maxIndex],
-        print "has most votes with: ",
-        print max
-        print candidates[minIndex],
-        print "has least votes with: ",
-        print min
+        #print candidates[maxIndex],
+        #print "has most votes with: ",
+        #print max
+        #print "least votes is: ",
+        #print min
         if max>totalVotes/2:
-            print "totalVotes/2 is: ",
-            print totalVotes/2,
-            print " so ",
-            print candidates[maxIndex],
-            print "auto wins"
+            #print "totalVotes/2 is: ",
+            #print totalVotes/2,
+            #print " so ",
+            #print candidates[maxIndex],
+            #print "auto wins"
             election = {maxIndex:[]}
             return
         if min == max:
             return
-        print candidates[minIndex],
-        print "lost like a bitch"
+        losers = []
+        for c in election:
+            if len(election[c]) == min:
+                losers.append(c);
+                #print candidates[c],
+                #print " ",
+        #print " tied for losing like a bitch"
         
-        
-        Ballot.hasLost[minIndex] = True
-        for b in election[minIndex]:
-            print "ballot given to",
-            election[b.nextWinner()].append(b)
-            print candidates[b.winner()]
-        del election[minIndex]
+        for c in losers:
+            Ballot.hasLost[c] = True
+            for b in election[c]:
+                #print "ballot given to",
+                election[b.nextWinner()].append(b)
+                #print candidates[b.winner()]
+            del election[c]
 
 def my_print (w) :
-    i = 0
-    #for i in xrange(0,len(election)):
-        
+#    i = 0
+#    keys = election.keys()
+#    for i in xrange(0,len(keys)):
+#        print candidates[keys[i]],
+#        if(i != len(keys)-1):
+#            print
     for c in election:
        print candidates[c]
     
@@ -144,7 +150,9 @@ def main () :
         numCases-=1
         if not b:
             break
-        print 
+        print
+ 
+        
 
 if __name__ == "__main__" :
     main()
