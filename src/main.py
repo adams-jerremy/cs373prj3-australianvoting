@@ -1,6 +1,14 @@
-
+#!/usr/bin/env python
 
 class Ballot(object):
+    """
+    Ballot object for holding Ballot information
+    Has a static boolean list variable hasLost that keeps track of
+    whether each candidate has lost so far
+    
+    Each instance also has a currentIndex pointer
+    and it's list of votes 
+    """
     hasLost = []
 
     def __init__(self, votes):
@@ -8,14 +16,24 @@ class Ballot(object):
         self.currentIndex = 0;
         
     def winner(self):
+        """
+        Returns current winner for this ballot
+        """
         return self.votes[self.currentIndex]
     
     def nextWinner(self):
+        """
+        Increments index to next highest available winner
+        """
         while(Ballot.hasLost[self.winner()]):
             self.currentIndex+=1
         return self.winner()
     
+    
 def initLost(length):
+    """
+    Initializes Ballot's hasLost boolean list
+    """
     Ballot.hasLost = []
     for i in xrange(0,length):
         Ballot.hasLost.append(False)
@@ -43,22 +61,26 @@ class OutputWriter (object) :
 # -------
 
 def my_read (r) :
+    """
+    Reads in an instance of the Australian Voting problem
+    """
+    
     global candidates
     global election
     global totalVotes
     try :
-        s = raw_input()
+        s = r.read()#raw_input()
         numCand = int(s)
         initLost(numCand)
         for i in xrange(0,numCand):
-            candidates.append(raw_input());
+            candidates.append(r.read()) #raw_input())
             election[i] = [] #.append([]);
         while True:
-            r = raw_input().split()
-            r = [int(a)-1 for a in r]
-            if len(r) == 0: 
+            v = r.read().split()#raw_input().split()
+            v = [int(a)-1 for a in v]
+            if len(v) == 0: 
                 break
-            b = Ballot(r)
+            b = Ballot(v)
             election[b.winner()].append(b)
             totalVotes+=1
         
@@ -67,6 +89,10 @@ def my_read (r) :
     return True
 
 def my_eval():
+    """
+    Solves Australian Voting by redistributing votes of losers
+    Precondition: my_read must have been called
+    """
     global candidates
     global election
     while(True):
@@ -116,6 +142,10 @@ def my_eval():
             del election[c]
 
 def my_print (w) :
+    """
+    Prints winner(s) 
+    Precondition: my_read and my_eval must have been called
+    """
 #    i = 0
 #    keys = election.keys()
 #    for i in xrange(0,len(keys)):
@@ -123,7 +153,7 @@ def my_print (w) :
 #        if(i != len(keys)-1):
 #            print
     for c in election:
-       print candidates[c]
+       w.write(candidates[c])
     
 
 candidates = []
